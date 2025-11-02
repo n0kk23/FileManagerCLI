@@ -35,7 +35,6 @@ public class FileManager {
         this.destinationDirectory = FileValidator.validateDestinationAndGetFile(pathToDestinationDirectory);
 
         if (sourceFileOrDirectory.getCanonicalFile().equals(destinationDirectory.getCanonicalFile())) {
-            logger.error("Source directory and destination directory can not be the same");
             throw new IllegalArgumentException("Source directory and destination directory can not be the same");
         }
         logger.debug("File Manager is successfully initialized");
@@ -57,7 +56,6 @@ public class FileManager {
         } else if (sourceFileOrDirectory.isDirectory()) {
             copyDirectory(sourceFileOrDirectory, destinationDirectory);
         } else {
-            logger.error("Unsupported file type: {}", sourceFileOrDirectory);
             throw new IOException("Unsupported file type: " + sourceFileOrDirectory);
         }
         logger.debug("Copying is ended successfully");
@@ -108,7 +106,6 @@ public class FileManager {
         File newDirectoryToCopy = new File(destinationToCopy, copiedDirectory.getName());
         // Создаем директорию на устройстве
         if (!newDirectoryToCopy.exists() && !newDirectoryToCopy.mkdir()) {
-            logger.error("Failed to create directory {}", newDirectoryToCopy);
             throw new IOException("Failed to create directory: " + newDirectoryToCopy);
         }
 

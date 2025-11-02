@@ -26,19 +26,16 @@ public class FileValidator {
         logger.debug("Validating source path: {}", pathToSourceFileOrDirectory);
 
         if (pathToSourceFileOrDirectory == null || pathToSourceFileOrDirectory.isBlank()) {
-            logger.error("Source file/directory is null or blank");
             throw new IllegalArgumentException("Field \"Source file\" is null or blank");
         }
 
         File sourceFileOrDirectory = new File(pathToSourceFileOrDirectory);
 
         if (!sourceFileOrDirectory.exists()) {
-            logger.error("{} is not found", sourceFileOrDirectory);
             throw new IllegalArgumentException("File \""+ sourceFileOrDirectory + "\" is not found");
         }
 
         if (!sourceFileOrDirectory.canRead()) {
-            logger.error("{} is unreadable", sourceFileOrDirectory);
             throw new IOException("File \"" + sourceFileOrDirectory + "\" is not readable");
         }
 
@@ -59,19 +56,16 @@ public class FileValidator {
         logger.debug("Validation destination path: {}", pathToDestinationDirectory);
 
         if (pathToDestinationDirectory == null || pathToDestinationDirectory.isBlank()) {
-            logger.error("Destination directory is null or blank");
             throw new IllegalArgumentException("Field \"Destination\" is null or blank");
         }
 
         File destination = new File(pathToDestinationDirectory);
 
         if (destination.exists() && !destination.isDirectory()) {
-            logger.error("{} is not a directory", pathToDestinationDirectory);
             throw new IllegalArgumentException(destination + " must be a directory");
         }
 
         if (!destination.exists() && !destination.mkdirs()) { // Создает директорию назначения, а так же создает родительские директории если они не существуют
-            logger.error("Can not create parent directories or destination directory for {}", pathToDestinationDirectory);
             throw new IOException("Failed to create parent directories or destination directory");
         }
 

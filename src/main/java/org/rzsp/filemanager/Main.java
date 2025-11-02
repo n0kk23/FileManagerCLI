@@ -26,7 +26,6 @@ public class Main {
 
         } catch (Exception e) {
             logger.error("Exception: {}", e.getMessage());
-            System.err.println("Exception: " + e.getMessage());
         } finally {
             logger.info("Application is finished");
         }
