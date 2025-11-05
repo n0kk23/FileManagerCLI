@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static org.rzsp.filemanager.FileValidator.*;
+
 /**
  * Класс для работы с файлами и директориями.
  * Позволяет выполнять операцию копирования файла/директории и возвращает размер файлов в директории.
@@ -32,8 +34,8 @@ public class FileManager {
     public FileManager(String pathToSourceFile, String pathToDestinationDirectory) throws IOException {
         logger.debug("Initializing File Manager");
 
-        this.sourceFileOrDirectory = FileValidator.validateSourceFileAndGetFile(pathToSourceFile);
-        this.destinationDirectory = FileValidator.validateDestinationAndGetFile(pathToDestinationDirectory);
+        this.sourceFileOrDirectory = validateSourceFileAndGetFile(pathToSourceFile);
+        this.destinationDirectory = validateDestinationAndGetFile(pathToDestinationDirectory);
 
         if (sourceFileOrDirectory.getCanonicalFile().equals(destinationDirectory.getCanonicalFile())) {
             throw new IllegalArgumentException("Source directory and destination directory can not be the same");
