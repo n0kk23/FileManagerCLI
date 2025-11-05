@@ -13,7 +13,7 @@ import static org.rzsp.filemanager.FileValidator.*;
 
 /**
  * Класс для работы с файлами и директориями.
- * Позволяет выполнять операцию копирования файла/директории и возвращает размер файлов в директории.
+ * Позволяет выполнять операцию копирования файла/директории и возвращать размер файлов в директории.
  */
 public class FileManager {
     private static final Logger logger = LogManager.getLogger(FileManager.class);
