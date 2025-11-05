@@ -62,7 +62,7 @@ public class TestFileValidator {
 
     @Test
     void sourceFileIsNotExist() throws IOException {
-        String pathToNotExistFile = "/home/user/file/not/exist.txt";
+        String pathToNotExistFile = "no_exist_file_txt";
 
         Exception exception = assertThrows(
                 IllegalArgumentException.class,

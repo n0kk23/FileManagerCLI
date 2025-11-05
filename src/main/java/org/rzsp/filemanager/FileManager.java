@@ -132,10 +132,10 @@ public class FileManager {
      * @param directory директория, размер которой хотим вернуть
      * @return размер всех файлов в директории
      */
-    public long getDirectorySize(File directory) {
+    public Long getDirectorySize(File directory) {
         File[] files = directory.listFiles();
         if (files == null) {
-            return 0;
+            return 0L;
         }
 
         return Arrays.stream(files)
