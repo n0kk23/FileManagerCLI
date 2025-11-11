@@ -1,7 +1,7 @@
 package org.rzsp.filemanager;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 
-public class TestFileValidator {
+public class TestCopyingFileValidator {
 
     /// TEST validateSourceFileAndGetFile ///
     /// ********************************* ///
@@ -20,7 +20,7 @@ public class TestFileValidator {
         File tempFile = File.createTempFile("text", ".txt");
         tempFile.deleteOnExit();
 
-        File result = FileValidator.validateSourceFileAndGetFile(tempFile.getAbsolutePath());
+        File result = org.rzsp.filemanager.validators.CopyingFileValidator.validateSourceFileOrDirectoryAndGetFile(tempFile.getAbsolutePath());
         assertNotNull(result);
         assertTrue(result.exists());
         assertEquals(tempFile.getAbsoluteFile(), result.getAbsoluteFile());
@@ -30,7 +30,7 @@ public class TestFileValidator {
     void pathToSourceFileOrDirectoryIsNull() {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> FileValidator.validateSourceFileAndGetFile(null)
+                () -> org.rzsp.filemanager.validators.CopyingFileValidator.validateSourceFileOrDirectoryAndGetFile(null)
         );
 
         assertEquals("Field \"Source file\" is null or blank", exception.getMessage());
@@ -42,7 +42,7 @@ public class TestFileValidator {
 
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> FileValidator.validateSourceFileAndGetFile(blankPath)
+                () -> org.rzsp.filemanager.validators.CopyingFileValidator.validateSourceFileOrDirectoryAndGetFile(blankPath)
         );
 
         assertEquals("Field \"Source file\" is null or blank", exception.getMessage());
@@ -54,7 +54,7 @@ public class TestFileValidator {
 
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> FileValidator.validateSourceFileAndGetFile(spacePath)
+                () -> org.rzsp.filemanager.validators.CopyingFileValidator.validateSourceFileOrDirectoryAndGetFile(spacePath)
         );
 
         assertEquals("Field \"Source file\" is null or blank", exception.getMessage());
@@ -66,7 +66,7 @@ public class TestFileValidator {
 
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> FileValidator.validateSourceFileAndGetFile(pathToNotExistFile)
+                () -> org.rzsp.filemanager.validators.CopyingFileValidator.validateSourceFileOrDirectoryAndGetFile(pathToNotExistFile)
         );
 
         assertEquals("File \""+ pathToNotExistFile + "\" is not found", exception.getMessage());
@@ -81,7 +81,7 @@ public class TestFileValidator {
         File tempFile = Files.createTempDirectory("dir").toFile();
         tempFile.deleteOnExit();
 
-        File result = FileValidator.validateDestinationAndGetFile(tempFile.getAbsolutePath());
+        File result = org.rzsp.filemanager.validators.CopyingFileValidator.validateTargetDirectoryAndGetFile(tempFile.getAbsolutePath());
         assertNotNull(result);
         assertTrue(result.exists());
         assertEquals(tempFile.getAbsoluteFile(), result.getAbsoluteFile());
@@ -91,7 +91,7 @@ public class TestFileValidator {
     void pathToDestinationDirectoryIsNull() {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> FileValidator.validateDestinationAndGetFile(null)
+                () -> org.rzsp.filemanager.validators.CopyingFileValidator.validateTargetDirectoryAndGetFile(null)
         );
 
         assertEquals("Field \"Destination\" is null or blank", exception.getMessage());
@@ -103,7 +103,7 @@ public class TestFileValidator {
 
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> FileValidator.validateDestinationAndGetFile(blankPath)
+                () -> org.rzsp.filemanager.validators.CopyingFileValidator.validateTargetDirectoryAndGetFile(blankPath)
         );
 
         assertEquals("Field \"Destination\" is null or blank", exception.getMessage());
@@ -115,7 +115,7 @@ public class TestFileValidator {
 
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> FileValidator.validateDestinationAndGetFile(spacesPath)
+                () -> org.rzsp.filemanager.validators.CopyingFileValidator.validateTargetDirectoryAndGetFile(spacesPath)
         );
 
         assertEquals("Field \"Destination\" is null or blank", exception.getMessage());

@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "org.rzsp"
-version = "1.0"
+version = ""
 
 repositories {
     mavenCentral()

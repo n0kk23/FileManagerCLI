@@ -1,4 +1,4 @@
-package org.rzsp.filemanager;
+package org.rzsp.filemanager.functions;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,16 +7,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
-import static org.rzsp.filemanager.FileValidator.*;
+import static org.rzsp.filemanager.validators.CopyingFileValidator.*;
 
 /**
- * Класс для работы с файлами и директориями.
- * Позволяет выполнять операцию копирования файла/директории и возвращать размер файлов в директории.
+ * Класс выполняющий функцию копирования.
+ * Позволяет выполнять операцию копирования файла/директории.
  */
-public class FileManager {
-    private static final Logger logger = LogManager.getLogger(FileManager.class);
+public class CopyingFile {
+    private static final Logger logger = LogManager.getLogger(CopyingFile.class);
 
     private static final int BUFFER_SIZE = 8192; // Размер буфера для копирования файла
 
@@ -24,24 +23,24 @@ public class FileManager {
     private final File destinationDirectory;
 
     /**
-     * Конструктор класса FileManager с указанием пути копируемого файла и директории назначения.
+     * Конструктор класса CopyingFile.
      *
      * @param pathToSourceFile путь к копируемогу файлу/директории
      * @param pathToDestinationDirectory путь к директории назначения
      * @throws IOException если произошла ошибка ввода
      * @throws IllegalArgumentException если копируемая директория совпадает с директорией назначения
      */
-    public FileManager(String pathToSourceFile, String pathToDestinationDirectory) throws IOException {
-        logger.debug("Initializing File Manager");
+    public CopyingFile(String pathToSourceFile, String pathToDestinationDirectory) throws IOException {
+        logger.debug("Initializing copying file constructor");
 
-        this.sourceFileOrDirectory = validateSourceFileAndGetFile(pathToSourceFile);
-        this.destinationDirectory = validateDestinationAndGetFile(pathToDestinationDirectory);
+        this.sourceFileOrDirectory = validateSourceFileOrDirectoryAndGetFile(pathToSourceFile);
+        this.destinationDirectory = validateTargetDirectoryAndGetFile(pathToDestinationDirectory);
 
         if (sourceFileOrDirectory.getCanonicalFile().equals(destinationDirectory.getCanonicalFile())) {
             throw new IllegalArgumentException("Source directory and destination directory can not be the same");
         }
 
-        logger.debug("File Manager is successfully initialized");
+        logger.debug("Copying file constructor is successfully initialized");
     }
 
     /**
@@ -69,20 +68,20 @@ public class FileManager {
     /**
      * Копирует файл в указанную директорию назначения.
      *
-     * @param copiedFileOrDirectory копируемый файл/директория
-     * @param destinationToCopy директория назначения, куда копируется copiedFileOrDirectory
+     * @param copiedFile копируемый файл
+     * @param directoryToCopy директория назначения, куда копируется copiedFileOrDirectory
      * @throws IOException если происходит ошибка ввода и вывода
      */
-    private void copyFile(File copiedFileOrDirectory, File destinationToCopy) throws IOException {
+    private void copyFile(File copiedFile, File directoryToCopy) throws IOException {
         /*
          * Создает файл назначения, куда будет копироваться исходный файл
          * Например: Копируем /home/user/example/text.txt в /home/user/test
          *           Код создаст /home/user/test/text.txt, где destinationToCopy -> /home/user/test, а copiedFileOrDirectory.getName() -> text.txt
          */
-        destinationToCopy = new File(destinationToCopy, copiedFileOrDirectory.getName());
+        File destinationToCopy = new File(directoryToCopy, copiedFile.getName());
 
         try (
-                FileInputStream in = new FileInputStream(copiedFileOrDirectory);
+                FileInputStream in = new FileInputStream(copiedFile);
                 FileOutputStream out = new FileOutputStream(destinationToCopy)
         ) {
             byte[] buffer = new byte[BUFFER_SIZE];
@@ -110,7 +109,7 @@ public class FileManager {
          */
         File newDirectoryToCopy = new File(destinationToCopy, copiedDirectory.getName());
         // Создаем директорию на устройстве
-        if (!newDirectoryToCopy.exists() && !newDirectoryToCopy.mkdir()) {
+        if (!newDirectoryToCopy.mkdir()) {
             throw new IOException("Failed to create directory: " + newDirectoryToCopy);
         }
 
@@ -125,36 +124,6 @@ public class FileManager {
             }
         }
 
-    }
-
-    /**
-     * Возвращает размер всех файлов в директории.
-     * Если директория содержит другие директории, то рекурсирвно возвращается их размер и суммируется.
-     *
-     * @param directory директория, размер которой хотим вернуть
-     * @return размер всех файлов в директории
-     */
-    public Long getDirectorySize(File directory) {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            return 0L;
-        }
-
-        return Arrays.stream(files)
-                .mapToLong(file -> {
-                    if (file.isDirectory()) {
-                        return getDirectorySize(file);
-                    } else if (file.isFile()) {
-                        return file.length();
-                    } else {
-                        return 0;
-                    }
-                })
-                .sum();
-    }
-
-    public File getDestinationDirectory() {
-        return destinationDirectory;
     }
 
 }
